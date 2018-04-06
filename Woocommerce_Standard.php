@@ -7,75 +7,55 @@ Tags: Woocommerce
 Version: 1.0
 Author: WAGA Team <dev@waga.it>
 Author URI: http://www.waga.it
-*/
+ */
 
 if(!class_exists("\\WBF\\modules\\components\\Component")) return;
 
 class Woocommerce_Standard extends \WBF\modules\components\Component{
 
-    /**
-     * This method will be executed at Wordpress startup (every page load)
-     */
-    public function setup(){
-	    global $woocommerce;
-        parent::setup();
-	    if(!isset($woocommerce)) return;
-	    $this->declare_hooks();
-	    Waboot()->add_component_style("component-{$this->name}-style",$this->directory_uri . '/assets/dist/css/woocommerce-standard.min.css');
-    }
+	/**
+	 * This method will be executed at Wordpress startup (every page load)
+	 */
+	public function setup(){
+		global $woocommerce;
+		parent::setup();
+		if(!isset($woocommerce)) return;
+		$this->declare_hooks();
+		Waboot()->add_component_style("component-{$this->name}-style",$this->directory_uri . '/assets/dist/css/woocommerce-standard.min.css');
+	}
 
-    private function declare_hooks(){
-	    //Disable the default display action for the page title
-	    /*add_action('woocommerce_before_main_content', function(){
-		    remove_action("waboot/site-main/before",'Waboot\hooks\display_singular_title');
-		    add_action("waboot/site-main/before",[$this,'display_shop_title_above_primary']);
-	    },9);*/
-	    add_action('woocommerce_before_main_content', [$this,'alter_archive_title_when_shop_title_above_primary'],9);
+	private function declare_hooks(){
+		//Disable the default display action for the page title
+		add_action('woocommerce_before_main_content', [$this,'alter_archive_title_when_shop_title_above_primary'],9);
 
 		//Disable the default Woocommerce stylesheet
-	    add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
+		add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
 
 		//Disabling actions
-	    remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
-	    remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40 );
-	    remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20 );
+		remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
+		remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40 );
+		remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20 );
 
 		//Enable the modification of woocommerce query and loop
-	    add_filter("loop_shop_per_page", [$this,"alter_posts_per_page"], 20);
-	    add_filter("post_class", [$this,"alter_post_class"], 20, 3);
-	    add_filter("post_type_archive_title",[$this,"alter_archive_page_title"],10,2);
+		add_filter("loop_shop_per_page", [$this,"alter_posts_per_page"], 20);
+		add_filter("loop_shop_columns", [$this,"alter_loop_columns"]);
+		add_filter("post_type_archive_title",[$this,"alter_archive_page_title"],10,2);
 
 		//Layout altering:
-	    add_filter("waboot/singular/title/display_flag",[$this,'alter_entry_title_visibility'],10,2);
-	    add_filter("waboot/layout/body_layout", [$this,"alter_body_layout"], 90);
-	    add_filter("waboot/layout/get_cols_sizes", [$this,"alter_col_sizes"], 90);
-	    add_action('init', [$this,"hidePriceAndCart"], 20);
-	    add_filter("waboot/layout/container/classes",[$this,'alter_container_classes_for_shop_page']);
+		add_filter("waboot/singular/title/display_flag",[$this,'alter_entry_title_visibility'],10,2);
+		add_filter("waboot/layout/body_layout", [$this,"alter_body_layout"], 90);
+		add_filter("waboot/layout/get_cols_sizes", [$this,"alter_col_sizes"], 90);
+		add_action('init', [$this,"hidePriceAndCart"], 20);
+		add_filter("waboot/layout/container/classes",[$this,'alter_container_classes_for_shop_page']);
 
-	    //Behaviors
-	    add_filter("wbf/modules/behaviors/get/primary-sidebar-size", [$this,"primary_sidebar_size_behavior"], 999);
-	    add_filter("wbf/modules/behaviors/get/secondary-sidebar-size", [$this,"secondary_sidebar_size_behavior"], 999);
+		//Behaviors
+		add_filter("wbf/modules/behaviors/get/primary-sidebar-size", [$this,"primary_sidebar_size_behavior"], 999);
+		add_filter("wbf/modules/behaviors/get/secondary-sidebar-size", [$this,"secondary_sidebar_size_behavior"], 999);
 
 		// Theme Options
-	    add_filter("wbf/theme_options/get/blog_primary_sidebar_size",[$this,"primary_sidebar_size_option"],999);
-	    add_filter("wbf/theme_options/get/blog_secondary_sidebar_size",[$this,"primary_sidebar_size_option"],999);
-    }
-
-	/**
-	 * Register component scripts (called automatically)
-	 */
-    public function scripts(){
-	    wp_register_script("component-{$this->name}-script",$this->directory_uri . '/assets/dist/js/woocommerce-standard.js', ['jquery'], false, false);
-	    wp_enqueue_script("component-{$this->name}-script");
-    }
-
-	/**
-	 * Register component styles (called automatically)
-	 */
-    public function styles(){
-    	//wp_register_style("component-{$this->name}-style",$this->directory_uri . '/assets/dist/css/woocommerce-standard.min.css');
-	    //wp_enqueue_style("component-{$this->name}-style");
-    }
+		add_filter("wbf/theme_options/get/blog_primary_sidebar_size",[$this,"primary_sidebar_size_option"],999);
+		add_filter("wbf/theme_options/get/blog_secondary_sidebar_size",[$this,"primary_sidebar_size_option"],999);
+	}
 
 	/**
 	 * This is an action callback.
@@ -310,8 +290,8 @@ class Woocommerce_Standard extends \WBF\modules\components\Component{
 		if(is_shop()){
 			$page_shop_id = wc_get_page_id( 'shop' );
 			foreach ($classes as $k => $class_name){
-				if($class_name === WabootLayout()->get_grid_class('container') || $class_name === 'container-fluid'){
-					$classes[$k] = WabootLayout()->get_container_grid_class(\WBF\modules\behaviors\get_behavior('content-width',$page_shop_id));
+				if($class_name === WabootLayout()->get_grid_class('container') || $class_name === WabootLayout()->get_grid_class('container-fluid')){
+					$classes[$k] = \WBF\modules\behaviors\get_behavior('content-width',$page_shop_id);
 					break;
 				}
 			}
@@ -575,46 +555,11 @@ class Woocommerce_Standard extends \WBF\modules\components\Component{
 	}
 
 	/**
-	 * Alter post class to display a different number or product per row
-	 *
-	 * @param $classes
-	 * @param string $class
-	 * @param string $post_id
-	 *
-	 * @hooked 'post_class'
-	 *
-	 * @return array
+	 * Alter loop colums
 	 */
-	public function alter_post_class($classes,$class = '', $post_id = ''){
-		if ( ! $post_id || 'product' !== get_post_type( $post_id ) ) {
-			return $classes;
-		}
-
-		global $woocommerce_loop;
-
-		$doing_ajax = defined('DOING_AJAX') && DOING_AJAX;
-		if(is_admin() && !$doing_ajax) return $classes; //skip for admin
-
-		if(is_single()){
-			//skip for single
-			$related = isset($woocommerce_loop['name']) && $woocommerce_loop['name'] == "related";
-
-			if(!isset($woocommerce_loop) || !$related){
-				return $classes; //skip if we are not in related products
-			}
-		}
-
+	public function alter_loop_columns() {
 		$cat_items = of_get_option('woocommerce_cat_items','3');
-		if($cat_items === '3'){
-			$cat_items_class = WabootLayout()->get_col_grid_class().'sm-4';
-		}elseif($cat_items === '4'){
-			$cat_items_class = WabootLayout()->get_col_grid_class().'sm-3';
-		}else{
-			$cat_items_class = WabootLayout()->get_col_grid_class().'sm-4';
-		}
-		$classes[] = $cat_items_class;
-
-		return $classes;
+		return $cat_items;
 	}
 
 	/**
