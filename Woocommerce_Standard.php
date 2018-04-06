@@ -20,7 +20,7 @@ class Woocommerce_Standard extends \WBF\modules\components\Component{
 	}
 
 	private function declare_hooks(){
-		if(\Waboot\functions\get_option('woocommerce_no_native_styles',false)){
+		if(\Waboot\functions\get_option('woocommerce_no_native_styles',true)){
 			//Disable the default Woocommerce stylesheet
 			add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
 		}
