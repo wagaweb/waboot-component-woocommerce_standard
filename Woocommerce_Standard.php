@@ -17,13 +17,10 @@ class Woocommerce_Standard extends \WBF\modules\components\Component{
 		parent::setup();
 		if(!isset($woocommerce)) return;
 		$this->declare_hooks();
-		if(\Waboot\functions\get_option('woocommerce_waboot_styles',true)){
-			Waboot()->add_component_style("component-{$this->name}-style",$this->directory_uri . '/assets/dist/css/woocommerce-standard.min.css');
-		}
 	}
 
 	private function declare_hooks(){
-		if(!\Waboot\functions\get_option('woocommerce_native_styles',false)){
+		if(\Waboot\functions\get_option('woocommerce_no_native_styles',false)){
 			//Disable the default Woocommerce stylesheet
 			add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
 		}
@@ -56,9 +53,16 @@ class Woocommerce_Standard extends \WBF\modules\components\Component{
 	}
 
 	/**
-	 * This is an action callback.
-	 *
-	 * Here you can use WBF Organizer to set component options
+	 * Enqueue styles
+	 */
+	public function styles(){
+		if(\Waboot\functions\get_option('woocommerce_waboot_styles',true)){
+			wp_enqueue_style("component-{$this->name}-style",$this->directory_uri . '/assets/dist/css/woocommerce-standard.min.css');
+		}
+	}
+
+	/**
+	 * Register options
 	 */
 	public function register_options(){
 		$orgzr = \WBF\modules\options\Organizer::getInstance();
@@ -117,10 +121,10 @@ class Woocommerce_Standard extends \WBF\modules\components\Component{
 		));
 
 		$orgzr->add(array(
-			'name' => __( 'Enable WooCommerce native styles', 'waboot' ),
+			'name' => __( 'Disable WooCommerce native styles', 'waboot' ),
 			'desc' => __( 'Check this box to enable WooCommerce native styles.', 'waboot' ),
-			'id'   => 'woocommerce_native_styles',
-			'std'  => '0',
+			'id'   => 'woocommerce_no_native_styles',
+			'std'  => '1',
 			'type' => 'checkbox'
 		));
 
