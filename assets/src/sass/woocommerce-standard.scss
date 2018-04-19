@@ -11,7 +11,6 @@
   background-color: #f7f7f7;
 }
 
-
 // Single Product
 
 .single-product div.product {
@@ -70,29 +69,19 @@
     }
   }
 
-}
 
 
-.woocommerce-tabs {
-  margin-top: 20px;
-  ul.wc-tabs {
-    padding: 0;
-    list-style-type: none;
-    border-bottom: 1px solid #ddd;
-    > li {
-      text-transform: uppercase;
-      display: inline-block;
-      padding: 10px;
-      margin-bottom: -1px;
-      &.active {
-        border-bottom: 1px solid;
+  .wc-tabs-wrapper {
+    margin-top: 20px;
+    ul.tabs {
+      padding: 0;
+      list-style-type: none;
+      li {
+        display: inline-block;
       }
     }
   }
-  .panel.wc-tab h2 {
-    font-size: 1em;
-    text-transform: uppercase;
-  }
+
 }
 
 
@@ -109,27 +98,17 @@
 ul.products {
   clear: both;
   display: flex;
-  flex-wrap: wrap;
   margin: 0 -10px;
   padding: 0;
   list-style-type: none;
-  .product {
-    flex-basis: 50%;
-    max-width: 50%;
+  &.columns-4 .product {
+    flex-basis: 25%;
   }
-  @include up($medium) {
-    &.columns-4 .product {
-      flex-basis: 25%;
-      max-width: 25%;
-    }
-    &.columns-3 .product {
-      flex-basis: 33.33333%;
-      max-width: 33.33333%;
-    }
+  &.columns-3 .product {
+    flex-basis: 33.33333%;
   }
   .product {
     padding: 0 10px;
-    margin-bottom: 20px;
     .woocommerce-loop-product__inner {
       position: relative;
     }
@@ -188,6 +167,11 @@ ul.products {
         padding: 10px;
       }
     }
+    th,
+    td {
+      text-align: right;
+    }
+
   }
   table.cart {
     margin-top: 0;
@@ -253,13 +237,11 @@ ul.products {
       width: 66.66666%;
       padding: 0 10px;
     }
+    #order_review_heading,
     #order_review {
       float: right;
       width: 33.33333%;
       padding: 0 10px;
-    }
-    #order_review_heading {
-      display: none;
     }
   }
 
@@ -304,15 +286,6 @@ ul.products {
       }
       input[type="submit"] {
         width: 100%;
-      }
-    }
-
-    .place-order {
-      button[type="submit"]{
-        width: 100%;
-        color: #fff;
-        background-color: #000;
-        text-transform: uppercase;
       }
     }
 
