@@ -2,18 +2,18 @@
 
 // General rules
 
-.woocommerce-message,
-.woocommerce-info {
+.woocommerce div[role="alert"],
+.woocommerce ul[role="alert"] {
+  list-style-type: none;
   padding: 15px;
   border: 1px solid #ddd;
-  font-size: 1.1em;
   margin-bottom: 20px;
-  background-color: #f7f7f7;
 }
 
 // Single Product
 
 .single-product div.product {
+  position: relative;
 
   @include up($medium) {
     display: flex;
@@ -68,8 +68,6 @@
       display: none;
     }
   }
-
-
 
   .wc-tabs-wrapper {
     margin-top: 20px;
@@ -224,6 +222,71 @@ ul.products {
   }
 }
 
+.widget_shopping_mini_cart {
+  .dropdown-cart-button {
+    margin: 0;
+    position: relative;
+    z-index: 99;
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 34px;
+      background: #FFFFFF;
+      border: 1px solid #ccc;
+      padding: 15px;
+      width: 320px;
+    }
+  }
+  .cart_list {
+    padding: 0;
+    list-style-type: none;
+    li {
+      position: relative;
+      display: flex;
+      font-size: .9em;
+      padding: 0 0 10px;
+      margin: 0 0 10px;
+      border-bottom: 1px solid #ddd;
+      .remove {
+        position: absolute;
+        left: -5px;
+        top: -5px;
+        background-color: #000;
+        font-size: 1em;
+        color: #fff;
+        border-radius: 50%;
+        width: 15px;
+        line-height: 15px;
+        text-align: center;
+      }
+      img {
+        width: 60px;
+        margin-right: 10px;
+        float: left;
+        border: 1px solid #ddd;
+      }
+      .quantity {
+        position: absolute;
+        width: 100%;
+        right: 0;
+        bottom: 10px;
+        text-align: right;
+      }
+    }
+  }
+  .woocommerce-mini-cart__total {
+    text-align: right;
+    margin-bottom: 10px;
+  }
+  .woocommerce-mini-cart__buttons {
+    text-align: right;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+  }
+}
+
 
 
 // Checkout
@@ -284,7 +347,7 @@ ul.products {
           display: none;
         }
       }
-      input[type="submit"] {
+      button[type="submit"] {
         width: 100%;
       }
     }
