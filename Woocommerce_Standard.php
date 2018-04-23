@@ -5,8 +5,8 @@ Description: An initial customization for WooCommerce
 Category: Utilities
 Tags: Woocommerce
 Version: 1.0
-Author: WAGA Team <dev@waga.it>
-Author URI: http://www.waga.it
+Author: Waboot Team <info@waboot.io>
+Author URI: http://www.waboot.io
 */
 
 if(!class_exists("\\WBF\\modules\\components\\Component")) return;
