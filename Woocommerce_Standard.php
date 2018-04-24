@@ -294,28 +294,6 @@ class Woocommerce_Standard extends \WBF\modules\components\Component{
 	}
 
 	/**
-	 * Retrieves the correct behavior value for shop page and 'content-width' behavior
-	 *
-	 * @param array $classes
-	 *
-	 * @hooked "waboot/layout/container/classes"
-	 *
-	 * @return array
-	 */
-	public function alter_container_classes_for_shop_page($classes){
-		if(is_shop()){
-			$page_shop_id = wc_get_page_id( 'shop' );
-			foreach ($classes as $k => $class_name){
-				if($class_name === WabootLayout()->get_grid_class('container') || $class_name === WabootLayout()->get_grid_class('container-fluid')){
-					$classes[$k] = \WBF\modules\behaviors\get_behavior('content-width',$page_shop_id);
-					break;
-				}
-			}
-		}
-		return $classes;
-	}
-
-	/**
 	 * Display the shop title when 'title_position' === 'above_primary'
 	 *
 	 * @hooked 'woocommerce_before_main_content'

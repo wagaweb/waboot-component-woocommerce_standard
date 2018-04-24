@@ -1,6 +1,7 @@
 <?php
 
 namespace Waboot\components\woocommerce_standard;
+use Waboot\Layout;
 
 /**
  * Inject WooCommerce-specific conditions for displaying the page title in 'above_primary' context. The 'below-primary' context in managed in archive-product.php
@@ -166,7 +167,7 @@ function alter_container_classes_for_shop_page($classes){
 	if(is_shop()){
 		$page_shop_id = wc_get_page_id( 'shop' );
 		foreach ($classes as $k => $class_name){
-			if($class_name === WabootLayout()->get_grid_class('container') || $class_name === WabootLayout()->get_grid_class('container-fluid')){
+			if($class_name === WabootLayout()->get_grid_class(Layout::GRID_CLASS_CONTAINER) || $class_name === WabootLayout()->get_grid_class(Layout::GRID_CLASS_CONTAINER_FLUID)){
 				$classes[$k] = \WBF\modules\behaviors\get_behavior('content-width',$page_shop_id);
 				break;
 			}
