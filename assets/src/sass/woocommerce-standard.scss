@@ -96,6 +96,7 @@
 ul.products {
   clear: both;
   display: flex;
+  flex-wrap: wrap;
   margin: 0 -10px;
   padding: 0;
   list-style-type: none;
@@ -105,8 +106,16 @@ ul.products {
   &.columns-3 .product {
     flex-basis: 33.33333%;
   }
+  @include down($small) {
+    .product,
+    &.columns-4 .product,
+    &.columns-3 .product {
+      flex-basis: 50%;
+    }
+  }
   .product {
     padding: 0 10px;
+    margin-bottom: 20px;
     .woocommerce-loop-product__inner {
       position: relative;
     }
