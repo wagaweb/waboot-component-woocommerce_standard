@@ -168,7 +168,9 @@ function alter_container_classes_for_shop_page($classes){
 		$page_shop_id = wc_get_page_id( 'shop' );
 		foreach ($classes as $k => $class_name){
 			if($class_name === WabootLayout()->get_grid_class(Layout::GRID_CLASS_CONTAINER) || $class_name === WabootLayout()->get_grid_class(Layout::GRID_CLASS_CONTAINER_FLUID)){
-				$classes[$k] = \WBF\modules\behaviors\get_behavior('content-width',$page_shop_id);
+				//We REPLACE the grid class with the behavior
+				$b = \WBF\modules\behaviors\get_behavior('content-width',$page_shop_id);
+				$classes[$k] =  WabootLayout()->get_grid_class($b);
 				break;
 			}
 		}
