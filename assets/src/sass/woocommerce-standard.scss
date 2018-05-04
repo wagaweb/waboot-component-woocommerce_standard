@@ -25,13 +25,16 @@
     }
     .woocommerce-product-gallery {
       flex-basis: 50%;
+      max-width: 50%;
     }
     .entry-summary {
       flex-basis: 50%;
+      max-width: 50%;
     }
     .woocommerce-tabs,
     .related {
       flex-basis: 100%;
+      max-width: 100%;
     }
   }
 
