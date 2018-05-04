@@ -4,7 +4,7 @@ Component Name: WooCommerce Standard
 Description: An initial customization for WooCommerce
 Category: Utilities
 Tags: Woocommerce
-Version: 1.0
+Version: 1.0.1
 Author: Waboot Team <info@waboot.io>
 Author URI: http://www.waboot.io
 */
