@@ -21,12 +21,13 @@ class Woocommerce_Standard extends \WBF\modules\components\Component{
         parent::setup();
 	    if(!isset($woocommerce)) return;
 	    $this->declare_hooks();
-	    Waboot()->add_component_style("component-{$this->name}-style",$this->directory_uri . '/assets/dist/css/woocommerce-standard.min.css');
     }
 
     private function declare_hooks(){
-		//Disable the default Woocommerce stylesheet
-	    add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
+	    if(\Waboot\functions\get_option('woocommerce_no_native_styles',true)) {
+		    //Disable the default Woocommerce stylesheet
+		    add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
+	    }
 
 		//Disabling actions
 	    remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
@@ -42,7 +43,9 @@ class Woocommerce_Standard extends \WBF\modules\components\Component{
 	    require_once $this->directory.'/inc/hooks-layout.php';
 
 	    //Templates
-	    require_once $this->directory.'/inc/hooks-templates.php';
+	    if(\Waboot\functions\get_option('woocommerce_waboot_templates_hooks',true)) {
+		    require_once $this->directory . '/inc/hooks-templates.php';
+	    }
 
 	    //Behaviors
 	    add_filter("wbf/modules/behaviors/get/primary-sidebar-size", [$this,"primary_sidebar_size_behavior"], 999);
@@ -65,8 +68,10 @@ class Woocommerce_Standard extends \WBF\modules\components\Component{
 	 * Register component styles (called automatically)
 	 */
     public function styles(){
-    	wp_register_style("component-{$this->name}-style",$this->directory_uri . '/assets/dist/css/woocommerce-standard.min.css');
-	    wp_enqueue_style("component-{$this->name}-style");
+	    if(\Waboot\functions\get_option('woocommerce_waboot_styles',true)){
+	        wp_register_style("component-{$this->name}-style",$this->directory_uri . '/assets/dist/css/woocommerce-standard.min.css');
+		    wp_enqueue_style("component-{$this->name}-style");
+	    }
     }
 
 	/**
@@ -123,6 +128,36 @@ class Woocommerce_Standard extends \WBF\modules\components\Component{
 		$orgzr->add_section("woocommerce",__( 'WooCommerce', 'waboot' ));
 
 		$orgzr->set_section("woocommerce");
+
+		$orgzr->add(array(
+			'name' => _x( 'General modifications', 'WooCommerce Standard component' , 'waboot' ),
+			'desc' => '',
+			'type' => 'info'
+		));
+
+		$orgzr->add(array(
+			'name' => __( 'Disable WooCommerce native styles', 'waboot' ),
+			'desc' => __( 'Check this box to enable WooCommerce native styles.', 'waboot' ),
+			'id'   => 'woocommerce_no_native_styles',
+			'std'  => '1',
+			'type' => 'checkbox'
+		));
+
+		$orgzr->add(array(
+			'name' => __( 'Enable Waboot WooCommerce styles', 'waboot' ),
+			'desc' => __( 'Check this box to enable Waboot specific WooCommerce styles.', 'waboot' ),
+			'id'   => 'woocommerce_waboot_styles',
+			'std'  => '1',
+			'type' => 'checkbox'
+		));
+
+		$orgzr->add(array(
+			'name' => _x( 'Enable Waboot templates hooks', 'WooCommerce Standard component', 'waboot' ),
+			'desc' => __( 'If checked, the theme will make use of special templates adjustment made for Waboot', 'waboot' ),
+			'id'   => 'woocommerce_waboot_templates_hooks',
+			'std'  => '1',
+			'type' => 'checkbox'
+		));
 
 		$orgzr->add(array(
 			'name' => __( 'WooCommerce Shop Page', 'waboot' ),
