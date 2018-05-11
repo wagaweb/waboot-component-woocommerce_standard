@@ -164,7 +164,8 @@ ul.products {
       }
     }
 
-    table {
+    table.shop_table {
+      @include table-responsive;
       border-collapse: collapse;
       border-spacing: 0;
       margin-bottom: 20px;
@@ -203,6 +204,11 @@ ul.products {
         p {
           margin: 0;
         }
+      }
+    }
+    .product-quantity {
+      .quantity {
+        display: inline-block;
       }
     }
     .screen-reader-text {
@@ -305,18 +311,20 @@ ul.products {
 
 .woocommerce-checkout {
 
-  form.woocommerce-checkout {
-    margin: 0 -10px;
-    #customer_details {
-      float: left;
-      width: 66.66666%;
-      padding: 0 10px;
-    }
-    #order_review_heading,
-    #order_review {
-      float: right;
-      width: 33.33333%;
-      padding: 0 10px;
+  @include up($medium){
+    form.woocommerce-checkout {
+      margin: 0 -10px;
+      #customer_details {
+        float: left;
+        width: 66.66666%;
+        padding: 0 10px;
+      }
+      #order_review_heading,
+      #order_review {
+        float: right;
+        width: 33.33333%;
+        padding: 0 10px;
+      }
     }
   }
 
