@@ -27,7 +27,7 @@ function alter_archive_title_when_shop_title_above_primary(){
 	},10,2);
 	remove_action("waboot/layout/archive/page_title/after",'Waboot\hooks\display_taxonomy_description',20);
 }
-add_action('woocommerce_before_main_content', __NAMESPACE__.'\\alter_archive_title_when_shop_title_above_primary',9); //Disable the default display action for the page title
+//add_action('woocommerce_before_main_content', __NAMESPACE__.'\\alter_archive_title_when_shop_title_above_primary',9); //Disable the default display action for the page title
 
 /**
  * Adds conditions by title displaying
@@ -42,7 +42,7 @@ function alter_entry_title_visibility($can_display_title, $current_title_positio
 		//Print entry header INSIDE the entries:
 		case "bottom":
 			//PLEASE NOTE: in reality, we need the "top" condition ONLY. The bottom condition is handled in our archive-product.php
-			if(\is_product_category()){
+            if(\is_product_category() || (is_tax() && \Woocommerce_Standard::is_woocommerce_taxonomy(get_queried_object()->taxonomy))){
 				$can_display_title = \Waboot\functions\get_option("woocommerce_archives_title_position") === "bottom" && (bool) \Waboot\functions\get_option("woocommerce_archives_display_title");
 			}elseif(\is_shop()){
 				$can_display_title = \Waboot\functions\get_option("woocommerce_shop_title_position") === "bottom" && (bool) \Waboot\functions\get_option("woocommerce_shop_display_title");
@@ -50,7 +50,7 @@ function alter_entry_title_visibility($can_display_title, $current_title_positio
 			break;
 		//Print entry header OUTSIDE the single entry:
 		case "top":
-			if(\is_product_category()){
+            if(\is_product_category() || (is_tax() && \Woocommerce_Standard::is_woocommerce_taxonomy(get_queried_object()->taxonomy))){
 				$can_display_title = \Waboot\functions\get_option("woocommerce_archives_title_position") === "top" && (bool) \Waboot\functions\get_option("woocommerce_archives_display_title");
 			}elseif(\is_shop()){
 				$can_display_title = \Waboot\functions\get_option("woocommerce_shop_title_position") === "top" && (bool) \Waboot\functions\get_option("woocommerce_shop_display_title");

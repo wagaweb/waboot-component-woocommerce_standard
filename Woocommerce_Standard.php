@@ -456,4 +456,16 @@ class Woocommerce_Standard extends \WBF\modules\components\Component{
         $cat_items = of_get_option('woocommerce_cat_items','3');
         return $cat_items;
     }
+
+    /**
+     * @param $tax
+     * @return bool
+     */
+    public static function is_woocommerce_taxonomy($tax){
+        $taxonomies = get_object_taxonomies( 'product' );
+        if( in_array( $tax, $taxonomies ) ){
+            return true;
+        }
+        return false;
+    }
 }
